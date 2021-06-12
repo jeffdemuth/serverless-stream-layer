@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>StreamLayer</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/3.35/esri/css/esri.css">
+<script src="https://js.arcgis.com/3.35/"></script>
+
+<style>
+html, body, #map {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+<script>
+require([
+    "esri/map",
+    "esri/layers/FeatureLayer",
+    "esri/layers/StreamLayer",
+    "esri/symbols/PictureMarkerSymbol",
+    "dojo/domReady!"
+  ],
+  function(
+    Map,
+    FeatureLayer,
+    StreamLayer,
+    PictureMarkerSymbol
+  ) {
+
+    var map = new Map("map", {
+      basemap: "gray",
+      center: [110.281323, -16.4390917],
+      zoom: 4
+    });
+	
+	var defaultPic = ""; //enter picture here to show on map
+	var renderer = {
+        type: "simple", 
+        symbol: {
+          type: "picture-marker", 
+          url: defaultPic,
+          width: 22,
+          height: 22
+        }
+      };
+
+  var layerDefinition = {
+    "geometryType": "esriGeometryPoint",
+    "drawingInfo": {
+            "renderer": {
+              "type": "simple",
+              "symbol": {
+                "type": "esriPMS",
+                "url": defaultPic,
+                "contentType": "image/png",
+                "width": 250,
+                "height": 250
+              }
+            }
+          },
+    "fields": [
+{
+      name: "ObjectId",
+      type: "esriFieldTypeOID",
+      alias: "ObjectId"
+    }, {
+      name: "TRACKID",
+      type: "esriFieldTypeOID",
+      alias: "TrackId"
+    }, {
+      name: "name",
+      type: "esriFieldTypeString",
+      alias: "Name"
+    }, {
+      name: "visibility",
+      type: "esriFieldTypeString",
+      alias: "Visibility"
+    }, {
+      name: "timestamp",
+      type: "esriFieldTypeDate",
+      alias: "TimeStamp"
+    }
+]
+  }
+  
+  var featureCollection = {
+    layerDefinition: layerDefinition,
+    featureSet: null
+  }
+  
+  var layer = new StreamLayer(featureCollection, {
+	socketUrl: "", //enter wss://apigatewayendpoing here
+popupTemplate: {
+    content: "OBJECTID={OBJECTID}, TRACKID={TRACKID}",
+  },
+timeInfo: {
+    trackIdField: "TRACKID"
+  },
+    purgeOptions: {
+      displayCount: 1000,
+age: .01
+    },
+    maximumTrackPoints: 1,
+  })
+  map.addLayer(layer);
+  
+                              });
+</script>
+</head>
+
+<body>
+  <div id="map"></div>
+</body>
+
+</html>
