@@ -38,31 +38,8 @@ require([
       zoom: 4
     });
 	
-	var defaultPic = ""; //enter picture here to show on map
-	var renderer = {
-        type: "simple", 
-        symbol: {
-          type: "picture-marker", 
-          url: defaultPic,
-          width: 22,
-          height: 22
-        }
-      };
-
   var layerDefinition = {
     "geometryType": "esriGeometryPoint",
-    "drawingInfo": {
-            "renderer": {
-              "type": "simple",
-              "symbol": {
-                "type": "esriPMS",
-                "url": defaultPic,
-                "contentType": "image/png",
-                "width": 250,
-                "height": 250
-              }
-            }
-          },
     "fields": [
 {
       name: "ObjectId",
@@ -94,7 +71,7 @@ require([
   }
   
   var layer = new StreamLayer(featureCollection, {
-	socketUrl: "", //enter wss://apigatewayendpoing here
+	socketUrl: "wss://5qlkq98dl7.execute-api.us-east-1.amazonaws.com/production",
 popupTemplate: {
     content: "OBJECTID={OBJECTID}, TRACKID={TRACKID}",
   },
